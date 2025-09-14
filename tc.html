@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shehab El-Din Ahmed — Data Engineer</title>
+  <meta name="description" content="Portfolio — Shehab El-Din Ahmed | Data Engineer (ETL, Big Data, Cloud)." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS for animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    /* ---------- Custom theme tokens ---------- */
+    :root{
+      --dark-bg-1: #071227;
+      --dark-bg-2: #0b1830;
+      --light-bg-1: #f8fafc;
+      --light-bg-2: #eef2f7;
+      --cta: #06b6d4;    /* cyan/teal */
+      --cta-2: #22c55e;  /* green accent */
+      --muted-dark: #94a3b8;
+      --muted-light: #475569;
+    }
+
+    /* ---------- Base ---------- */
+    html,body{height:100%}
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin:0;
+      background: linear-gradient(180deg, var(--dark-bg-1), var(--dark-bg-2));
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      scroll-behavior:smooth;
+      padding-top:88px; /* navbar spacing */
+    }
+
+    /* Light mode: clear readable colors */
+    body.light {
+      background: linear-gradient(180deg, var(--light-bg-1), var(--light-bg-2));
+      color: #0f172a;
+    }
+
+    /* ---------- NAV ---------- */
+    .site-nav {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      margin: 0 auto;
+      max-width: 1180px;
+      z-index: 80;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:.6rem .9rem;
+      border-radius:12px;
+      backdrop-filter: blur(8px) saturate(120%);
+      background: rgba(13, 124, 79, 0.04);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.5);
+    }
+    body.light .site-nav { 
+      background: rgb(255, 255, 255); 
+      box-shadow: 0 10px 30px rgba(2,6,23,0.1); 
+    }
+
+    .brand { display:flex; gap:.6rem; align-items:center; min-width:0; }
+    .brand img { width:46px; height:46px; border-radius:999px; object-fit:cover; border:2px solid rgba(255,255,255,0.06); }
+    body.light .brand img { border-color: rgba(15,23,42,0.1); }
+
+    /* nav links: desktop show, mobile hide -> burger shown */
+    .nav-links { display:flex; gap:.5rem; align-items:center; overflow-x:auto; -webkit-overflow-scrolling:touch; white-space:nowrap; padding:4px 2px; flex:1; }
+    .nav-links a { color:var(--muted-dark); text-decoration:none; font-weight:600; padding:8px 12px; border-radius:10px; flex-shrink:0; }
+    body.light .nav-links a { color:var(--muted-light); }
+    .nav-links a:hover { background: rgba(255,255,255,0.04); color:#fff; }
+    body.light .nav-links a:hover { background: rgba(15,23,42,0.06); color:#0f172a; }
+    .nav-links a.active { background: linear-gradient(90deg,var(--cta), var(--cta-2)); color:#021; box-shadow:0 8px 28px rgba(6,12,40,0.4); }
+
+    /* burger */
+    #burgerBtn{ display:none; }
+    @media(max-width:880px){
+      .nav-links { display:none; }
+      #burgerBtn{ display:inline-flex; }
+    }
+
+    /* ---------- Mobile Menu (Improved) ---------- */
+    #mobileMenu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 70;
+      background: rgba(7, 18, 39, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    body.light #mobileMenu {
+      background: rgba(51, 87, 122, 0.98);
+    }
+    
+    
+    #mobileMenu.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    #mobileMenu nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 300px;
+      padding: 2rem;
+    }
+    
+    #mobileMenu a {
+      color: #e6eef8;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    body.light #mobileMenu a {
+      color: #0f172a;
+      background: rgba(15, 23, 42, 0.05);
+    }
+    
+    #mobileMenu a:hover {
+      background: linear-gradient(90deg, var(--cta), var(--cta-2));
+      color: #021;
+      transform: translateY(-2px);
+    }
+    
+    #closeMenu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: #e6eef8;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    body.light #closeMenu {
+      color: #0f172a;
+    }
+
+    /* ---------- Panels / Card ---------- */
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:14px;
+      padding:16px;
+      box-shadow: 0 14px 40px rgba(2,6,23,0.45);
+    }
+    body.light .panel { 
+      background: white; 
+      color:#0f172a; 
+      box-shadow: 0 10px 30px rgba(2,6,23,0.08); 
+    }
+
+    /* portrait gradient border */
+    .portrait-wrap { padding:6px; border-radius:999px; background: linear-gradient(135deg,var(--cta),var(--cta-2)); display:inline-block; }
+    .portrait { width:140px; height:140px; border-radius:999px; object-fit:cover; display:block; border:4px solid rgba(255,255,255,0.06); }
+    body.light .portrait { border-color:#fff; }
+
+    @media(min-width:1024px){ .portrait { width:180px; height:180px; } }
+
+    /* typing effect look */
+    .typing { font-weight:700; color: rgb(88, 157, 192); }
+    body.light .typing { color: var(--cta); }
+
+    /* services icon */
+    .service-icon { width:56px; height:56px; border-radius:12px; display:grid; place-items:center; color:white; font-size:20px; }
+
+    /* tools grid */
+    .tool { border-radius:10px; padding:10px; display:flex; flex-direction: column; align-items:center; justify-content:center; background: rgba(255,255,255,0.03); }
+    .tool-icon { font-size: 24px; margin-bottom: 8px; }
+
+    /* project cards */
+    .project-card { border-radius:12px; overflow:hidden; background: rgba(255,255,255,0.02); transition: transform .28s ease, box-shadow .28s ease; }
+    .project-card:hover { transform: translateY(-10px) scale(1.01); box-shadow: 0 18px 60px rgba(0,0,0,0.45); }
+    .project-thumb { width:100%; height:220px; object-fit:cover; display:block; }
+    @media(min-width:1024px){ .project-thumb{ height:260px; } }
+
+    /* contact wave / area */
+    .contact-area { border-radius:14px; padding:18px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); }
+
+    /* counters */
+    .counter { font-weight:800; font-size:1.6rem; color:var(--cta); }
+
+    /* scroll to top */
+    #scrollTopBtn{ position:fixed; right:18px; bottom:18px; z-index:100; border-radius:999px; display:none; padding:10px 12px; background: linear-gradient(90deg,var(--cta), var(--cta-2)); color:#021; box-shadow:0 14px 40px rgba(0,0,0,0.4); }
+
+    /* focus visible for accessibility */
+    a:focus, button:focus, input:focus, textarea:focus { outline: 3px solid rgba(6,182,212,0.18); outline-offset: 2px; }
+
+    /* small helpers */
+    .muted { color:#94a3b8; }
+    body.light .muted { color:#64748b; }
+
+    .btn-cta { background: linear-gradient(90deg,var(--cta),var(--cta-2)); color:#021; padding:10px 14px; border-radius:999px; font-weight:700; display:inline-flex; gap:8px; align-items:center; }
+    .btn-ghost { border: 1px solid rgba(255,255,255,0.06); padding:8px 12px; border-radius:999px; background:transparent; color: #fff; }
+    body.light .btn-ghost { border-color: rgba(15,23,42,0.1); color:#0f172a; }
+
+    /* mobile-friendly touch sizes */
+    .touch-lg { padding:12px 14px; border-radius:10px; }
+
+    /* تحسين وضوح النموذج */
+    .panel, .contact-area {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    
+    /* تحسين وضوح النص */
+    body {
+      line-height: 1.6;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      line-height: 1.3;
+    }
+    
+    /* تحسين ظهور أيقونات التواصل الاجتماعي */
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+    }
+    
+    .social-icon:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, var(--cta), var(--cta-2));
+      color: #021 !important;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    body.light .social-icon {
+      background: rgba(15, 23, 42, 0.1);
+    }
+    
+    /* جعل أيقونة GitHub أكثر وضوحًا */
+    .github-icon {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    body.light .github-icon {
+      background: rgba(15, 23, 42, 0.15);
+    }
+/* تحسين حقول الإدخال - حل قوي للنص غير الواضح */
+    input, textarea {
+      color: #000000 !important; /* أسود كامل مع !important */
+      background-color: #ffffff !important; /* خلفية بيضاء واضحة */
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      font-weight: 600; /* نص سميك */
+      font-size: 16px; /* حجم أكبر */
+    }
+    
+    body.light input, 
+    body.light textarea {
+      color: #000000 !important; /* أسود كامل في الوضع الفاتح أيضاً */
+      background-color: #ffffff !important; /* خلفية بيضاء */
+      border: 2px solid rgba(15, 23, 42, 0.2);
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    input:focus, textarea:focus {
+      border-color: var(--cta);
+      box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+    }
+    
+    body.light input:focus,
+    body.light textarea:focus {
+      border-color: var(--cta);
+      box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3);
+    }
+    
+    /* تحسين النصوص التوضيحية - هذا هو الجزء المطلوب تعديله */
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(200, 220, 240, 0.8); /* لون أزرق فاتح للوضع الداكن */
+      font-style: italic;
+    }
+    
+    body.light input::placeholder,
+    body.light textarea::placeholder {
+      color: rgba(30, 40, 60, 0.7); /* لون أزرق داكن للوضع الفاتح */
+      font-style: italic;
+    }
+     .text-white {
+      color: #ffffff !important;
+    }
+    
+    body.light .text-white {
+      color: #0f172a !important;
+    }
+    
+    /* تطبيق على جميع العناوين */
+    h1, h2, h3, h4, h5, h6 {
+      color: #ffffff;
+    }
+    
+    body.light h1, 
+    body.light h2, 
+    body.light h3, 
+    body.light h4, 
+    body.light h5, 
+    body.light h6 {
+      color: #0f172a;
+    }
+    
+    /* إصلاح خاص لعناوين الأقسام */
+    section h3 {
+      color: #ffffff !important;
+    }
+    
+    body.light section h3 {
+      color: #0f172a !important;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="site-nav" role="banner" aria-label="Main navigation">
+    <div class="brand">
+      <img src="me.jpg" alt="Shehab photo" loading="lazy">
+      <div style="min-width:0;">
+        <div style="font-weight:800; font-size:0.95rem; line-height:1;">Shehab El-Din Ahmed</div>
+        <div class="muted" style="font-size:0.75rem;">Data Engineer</div>
+      </div>
+    </div>
+
+    <!-- desktop links -->
+    <nav class="nav-links" role="navigation" aria-label="Page sections">
+      <a href="#hero" class="active">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href="https://github.com/shehab-hub-0/Shehab.github.io/blob/main/CV/My%20reseme.pdf" target="_blank" rel="noopener" class="btn-ghost touch-lg" aria-label="Open CV">
+        <i class="fa fa-file-pdf"></i><span class="hidden sm:inline ml-2">CV</span>
+      </a>
+      
+      <button id="themeToggle" class="btn-ghost touch-lg" aria-pressed="false" title="Toggle theme"><i id="themeIcon" class="fa fa-moon"></i></button>
+
+      <!-- burger for mobile -->
+      <button id="burgerBtn" class="btn-ghost touch-lg sm:hidden" aria-expanded="false" aria-controls="mobileMenu" title="Open menu"><i class="fa fa-bars"></i></button>
+
+      <a href="#contact" class="btn-cta touch-lg hidden sm:inline">Hire Me</a>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU (Improved) -->
+  <div id="mobileMenu" class="hidden">
+    <button id="closeMenu" aria-label="Close menu"><i class="fas fa-times"></i></button>
+    <nav>
+      <a href="#hero" class="active">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+
+  <main class="max-w-6xl mx-auto px-4">
+
+    <!-- HERO (image + name first) -->
+    <section id="hero" class="pt-6 pb-10" data-aos="fade-up">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <!-- portrait & quick -->
+        <div class="order-1 lg:order-1 flex justify-center lg:justify-start">
+          <div class="panel text-center lg:text-left" style="max-width:520px;">
+            <div class="flex gap-4 items-center">
+              <div class="portrait-wrap">
+                <img src="me.jpg" alt="Shehab El-Din Ahmed" class="portrait" loading="lazy">
+              </div>
+              <div style="min-width:0;">
+                <h1 class="text-2xl lg:text-3xl font-bold leading-tight">Shehab El-Din Ahmed</h1>
+                <div class="muted mt-1">Data Engineer — Big Data & Cloud</div>
+                <div class="mt-3 text-sm">
+                  <span class="muted">I build</span>
+                  <span id="typing" class="typing ml-2">ETL pipelines</span>
+                </div>
+                <div class="mt-5 flex flex-wrap gap-3">
+                  <a href="#contact" class="btn-cta touch-lg">Contact Me</a>
+                  <a href="https://drive.google.com/file/d/16J26rF1FCadvKHdLIX21uaGusKvvV1Hh/view" target="_blank" class="btn-ghost touch-lg">Open CV</a>
+                </div>
+
+               
+              </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-2 gap-3">
+              <div class="bg-white/5 body-light:bg-gray-100 rounded-lg p-3 text-left">
+                <div class="text-sm muted">Location</div>
+                <div class="font-semibold">Beni Suef, Egypt</div>
+              </div>
+              <div class="bg-white/5 body-light:bg-gray-100 rounded-lg p-3 text-left">
+                <div class="text-sm muted">Availability</div>
+                <div class="font-semibold">Freelance & Full-time</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Short intro (right on desktop; under portrait on mobile) -->
+        <div class="order-2 lg:order-2">
+          <div class="panel">
+            <h2 class="text-xl font-bold">About Me</h2>
+            <p class="muted mt-3 leading-relaxed text-sm">
+              I'm <strong>Shehab El-Din Ahmed Mowed</strong>, a fast-learning Data Engineer from Beni Suef, Egypt. I specialize in designing and optimizing data pipelines, ETL workflows, and scalable database solutions using <strong>Python, SQL, and Apache Airflow</strong>.
+            </p>
+            <p class="muted mt-3 leading-relaxed text-sm">
+              My main interests are <strong>Big Data</strong> and <strong>Cloud Data Engineering</strong>, where I aim to build efficient systems that transform raw data into actionable business insights. I bring curiosity, problem-solving skills, and a continuous learning mindset to every project.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="text-xs px-3 py-1 rounded-full bg-white/6">Python</span>
+              <span class="text-xs px-3 py-1 rounded-full bg-white/6">Airflow</span>
+              <span class="text-xs px-3 py-1 rounded-full bg-white/6">Spark</span>
+              <span class="text-xs px-3 py-1 rounded-full bg-white/6">Kafka</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="py-8" data-aos="fade-up">
+      <h3 class="text-lg sm:text-2xl font-bold mb-4 text-white text-center">Services</h3>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="panel flex gap-4 items-start">
+          <div class="service-icon bg-gradient-to-br from-cyan-400 to-blue-600"><i class="fab fa-python"></i></div>
+          <div>
+            <h4 class="font-semibold">Python Development</h4>
+            <p class="muted text-sm mt-1">Building advanced data applications using Pandas, NumPy, and developing ETL systems.</p>
+          </div>
+        </div>
+
+        <div class="panel flex gap-4 items-start">
+          <div class="service-icon bg-gradient-to-br from-indigo-500 to-purple-600"><i class="fa-solid fa-bolt"></i></div>
+          <div>
+            <h4 class="font-semibold">Apache Spark</h4>
+            <p class="muted text-sm mt-1">Processing big data using Spark for analysis and distributed algorithms.</p>
+          </div>
+        </div>
+
+        <div class="panel flex gap-4 items-start">
+          <div class="service-icon bg-gradient-to-br from-amber-500 to-orange-500"><i class="fa-solid fa-exchange-alt"></i></div>
+          <div>
+            <h4 class="font-semibold">Kafka Systems</h4>
+            <p class="muted text-sm mt-1">Building real-time data systems using Kafka for streaming and integration.</p>
+          </div>
+        </div>
+
+        <div class="panel flex gap-4 items-start">
+          <div class="service-icon bg-gradient-to-br from-emerald-400 to-teal-500"><i class="fa-solid fa-database"></i></div>
+          <div>
+            <h4 class="font-semibold">Database Management</h4>
+            <p class="muted text-sm mt-1">Designing and optimizing database systems for performance and scalability.</p>
+          </div>
+        </div>
+
+        <div class="panel flex gap-4 items-start">
+          <div class="service-icon bg-gradient-to-br from-purple-500 to-pink-500"><i class="fa-solid fa-cloud"></i></div>
+          <div>
+            <h4 class="font-semibold">Cloud Solutions</h4>
+            <p class="muted text-sm mt-1">Deploying and managing data infrastructure on cloud platforms like AWS.</p>
+          </div>
+        </div>
+
+        <div class="panel flex gap-4 items-start">
+          <div class="service-icon bg-gradient-to-br from-sky-400 to-indigo-500"><i class="fa-solid fa-chart-bar"></i></div>
+          <div>
+            <h4 class="font-semibold">Data Visualization</h4>
+            <p class="muted text-sm mt-1">Creating interactive dashboards and reports for data insights.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOLS & TECHNOLOGIES -->
+    <section id="tools" class="py-8" data-aos="fade-up">
+      <h3 class="text-lg sm:text-2xl font-bold mb-4 text-white text-center">Tools & Technologies</h3>
+      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fab fa-python"></i></div>
+          <div>Python</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fas fa-database"></i></div>
+          <div>SQL</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fas fa-cloud"></i></div>
+          <div>Azure</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fas fa-broadcast-tower"></i></div>
+          <div>Kafka</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fas fa-bolt"></i></div>
+          <div>Spark</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fas fa-server"></i></div>
+          <div>Hadoop</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fas fa-wind"></i></div>
+          <div>Airflow</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fas fa-snowflake"></i></div>
+          <div>Snowflake</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fab fa-aws"></i></div>
+          <div>AWS</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fab fa-docker"></i></div>
+          <div>Docker</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fas fa-table"></i></div>
+          <div>Excel</div>
+        </div>
+        <div class="tool panel text-center">
+          <div class="tool-icon"><i class="fas fa-chart-line"></i></div>
+          <div>Power BI</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICK STATS -->
+    <section id="stats" class="py-8" data-aos="fade-up">
+      <h3 class="text-lg sm:text-2xl font-bold mb-4 text-white text-center">Quick Stats</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="panel text-center">
+          <div class="counter" data-target="1">0</div>
+          <div class="muted mt-1 text-sm">Years Experience</div>
+        </div>
+        <div class="panel text-center">
+          <div class="counter" data-target="3">0</div>
+          <div class="muted mt-1 text-sm">Projects Completed</div>
+        </div>
+        <div class="panel text-center">
+          <div class="counter" data-target="2">0</div>
+          <div class="muted mt-1 text-sm">Articles Published</div>
+        </div>
+        <div class="panel text-center">
+          <div class="counter" data-target="3">0</div>
+          <div class="muted mt-1 text-sm">Satisfied Clients</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="py-8" data-aos="fade-up">
+      <h3 class="text-lg sm:text-2xl font-bold mb-4 text-white text-center">Professional Experience</h3>
+      <div class="panel timeline">
+        <div>
+          <div class="font-semibold">Data Engineer — Digital Egypt Pioneers Initiative (DEPI)</div>
+          <div class="muted text-sm">2024 - Present</div>
+          <p class="muted mt-2 text-sm">Building ETL pipelines using Airflow and Spark, managing big data architecture, and analyzing data to extract valuable insights.</p>
+        </div>
+      </div>
+    </section>
+
+     <!-- Projects -->
+  <section id="projects" class="py-16 md:py-20 px-4">
+    <div class="container mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16" data-aos="fade-up">Featured <span class="section-title">Projects</span></h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <!-- Titanic Data Analysis Project -->
+        <div class="project-card rounded-xl overflow-hidden" data-aos="flip-left">
+          <div class="h-40 md:h-48 bg-gradient-to-r from-primary-light/30 to-secondary-light/30 dark:from-primary-dark/30 dark:to-secondary-dark/30 flex items-center justify-center">
+            <i class="fas fa-ship text-5xl md:text-6xl text-white"></i>
+          </div>
+          <div class="p-4 md:p-6">
+            <h3 class="text-lg md:text-xl font-bold mb-2">Titanic Data Analysis</h3>
+            <p class="text-dark-light/70 dark:text-light-dark/70 mb-4 text-sm md:text-base">Advanced exploratory analysis using Python and Pandas with interactive visualizations.</p>
+            <a href="https://github.com/shehab-hub-0/titanic-visualization" class="text-primary-light dark:text-primary-dark font-semibold hover:underline text-sm md:text-base">View Project →</a>
+          </div>
+        </div>
+        
+        <!-- ETL Pipeline Project -->
+        <div class="project-card rounded-xl overflow-hidden" data-aos="flip-left" data-aos-delay="100">
+          <div class="h-40 md:h-48 bg-gradient-to-r from-secondary-light/30 to-primary-light/30 dark:from-secondary-dark/30 dark:to-primary-dark/30 flex items-center justify-center">
+            <i class="fas fa-code-branch text-5xl md:text-6xl text-white"></i>
+          </div>
+          <div class="p-4 md:p-6">
+            <h3 class="text-lg md:text-xl font-bold mb-2">ETL Pipeline</h3>
+            <p class="text-dark-light/70 dark:text-light-dark/70 mb-4 text-sm md:text-base">Building ETL pipeline using Airflow for data processing and storage.</p>
+            <a href="https://github.com/shehab-hub-0/ETL-Pipeline" class="text-primary-light dark:text-primary-dark font-semibold hover:underline text-sm md:text-base">View Project →</a>
+          </div>
+        </div>
+        
+        <!-- Interactive Dashboard Project -->
+        <div class="project-card rounded-xl overflow-hidden" data-aos="flip-left" data-aos-delay="200">
+          <div class="h-40 md:h-48 bg-gradient-to-r from-primary-light/30 to-secondary-light/30 dark:from-primary-dark/30 dark:to-secondary-dark/30 flex items-center justify-center">
+            <i class="fas fa-chart-bar text-5xl md:text-6xl text-white"></i>
+          </div>
+          <div class="p-4 md:p-6">
+            <h3 class="text-lg md:text-xl font-bold mb-2">Interactive Dashboard</h3>
+            <p class="text-dark-light/70 dark:text-light-dark/70 mb-4 text-sm md:text-base">Interactive data visualization using Dash and Plotly.</p>
+            <a href="https://github.com/shehab-hub-0/Interactive-Dashboard" class="text-primary-light dark:text-primary-dark font-semibold hover:underline text-sm md:text-base">View Project →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+    <!-- CONTACT -->
+    <section id="contact" class="py-10" data-aos="fade-up">
+      <h3 class="text-lg sm:text-2xl font-bold mb-4 text-white text-center">Contact Me</h3>
+      <p class="muted text-center mb-6">I'm available for freelance work and collaborative projects. Feel free to reach out!</p>
+
+      <div class="max-w-2xl mx-auto contact-area panel">
+        <form id="contactForm" novalidate>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <label class="flex flex-col">
+              <span class="font-medium text-sm">Full Name</span>
+              <input type="text" id="name" name="name" required class="mt-2 p-3 rounded-md bg-white/6" placeholder="Your full name">
+            </label>
+
+            <label class="flex flex-col">
+              <span class="font-medium text-sm">Email Address</span>
+              <input type="email" id="email" name="email" required class="mt-2 p-3 rounded-md bg-white/6" placeholder="you@example.com">
+            </label>
+          </div>
+
+          <label class="flex flex-col mt-4">
+            <span class="font-medium text-sm">Your Message</span>
+            <textarea id="message" name="message" rows="5" required class="mt-2 p-3 rounded-md bg-white/6" placeholder="Write a short message..."></textarea>
+          </label>
+
+          <div class="mt-4 flex items-center gap-3">
+            <button type="submit" class="btn-cta">Send Message</button>
+            <div id="formStatus" class="muted text-sm"></div>
+          </div>
+        </form>
+
+        <div class="mt-6 flex justify-center gap-6 text-xl">
+          <a href="https://www.facebook.com/shehab.ahmed.711804?rdid=0UFfXOz5KaukQ28J&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1BEzMmU6iu%2F#" target="_blank" class="social-icon text-blue-400" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="mailto:shahbahmed56p@gmail.com" class="social-icon text-rose-400" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          <a href="https://www.linkedin.com/in/shehab-eldinahmed" target="_blank" class="social-icon text-blue-300" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com/shehab-hub-0" target="_blank" class="social-icon github-icon text-white" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="tel:+201011457319" class="social-icon text-emerald-400" aria-label="Phone"><i class="fas fa-phone"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-8 text-center muted">
+      <div>© 2025 Shehab El-Din Ahmed — Built with TailwindCSS & AOS</div>
+    </footer>
+
+  </main>
+
+  <!-- SCROLL TO TOP -->
+  <button id="scrollTopBtn" aria-label="Scroll to top" class="hidden"><i class="fa fa-arrow-up"></i></button>
+
+  <!-- ---------- Scripts ---------- -->
+  <script>
+    // Init AOS
+    AOS.init({ duration: 800, once: true });
+
+    // MOBILE MENU TOGGLE (Improved)
+    (function(){
+      const burger = document.getElementById('burgerBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const closeMenu = document.getElementById('closeMenu');
+      
+      if(!burger) return;
+      
+      function toggleMenu() {
+        const isExpanded = burger.getAttribute('aria-expanded') === 'true';
+        burger.setAttribute('aria-expanded', String(!isExpanded));
+        mobileMenu.classList.toggle('active');
+        
+        // Prevent body scrolling when menu is open
+        document.body.style.overflow = isExpanded ? '' : 'hidden';
+      }
+      
+      burger.addEventListener('click', toggleMenu);
+      closeMenu.addEventListener('click', toggleMenu);
+      
+      // Close menu when clicking on a link
+      const menuLinks = mobileMenu.querySelectorAll('a');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', toggleMenu);
+      });
+      
+      // Close menu on outside click
+      document.addEventListener('click', (e) => {
+        if (mobileMenu.classList.contains('active') && 
+            !mobileMenu.contains(e.target) && 
+            !burger.contains(e.target)) {
+          toggleMenu();
+        }
+      });
+      
+      // Close menu on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+          toggleMenu();
+        }
+      });
+    })();
+
+    // THEME TOGGLE (light/dark) with persistence
+    (function(){
+      const btn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon');
+      const key = 'shehab_theme_final';
+      const body = document.body;
+
+      function apply(mode) {
+        if(mode === 'light') {
+          body.classList.add('light');
+          icon.className = 'fa fa-sun';
+          btn.setAttribute('aria-pressed','true');
+        } else {
+          body.classList.remove('light');
+          icon.className = 'fa fa-moon';
+          btn.setAttribute('aria-pressed','false');
+        }
+      }
+
+      const saved = localStorage.getItem(key);
+      if(saved === 'light') apply('light');
+      else apply('dark'); // default to dark for contrast
+
+      btn.addEventListener('click', () => {
+        const isLight = body.classList.toggle('light');
+        apply(isLight ? 'light' : 'dark');
+        localStorage.setItem(key, isLight ? 'light' : 'dark');
+      });
+    })();
+
+    // TYPING EFFECT
+    (function(){
+      const el = document.getElementById('typing');
+      if(!el) return;
+      const phrases = ['ETL pipelines','Big Data Processing','Cloud Data Solutions'];
+      let idx = 0, pos = 0, forward = true;
+      const speed = 60, pause = 900;
+      function tick(){
+        const cur = phrases[idx];
+        if(forward){
+          pos++;
+          el.textContent = cur.slice(0,pos);
+          if(pos === cur.length){ forward = false; setTimeout(tick, pause); return; }
+        } else {
+          pos--;
+          el.textContent = cur.slice(0,pos);
+          if(pos === 0){ forward = true; idx = (idx+1) % phrases.length; }
+        }
+        setTimeout(tick, speed);
+      }
+      tick();
+    })();
+
+    // COUNTERS
+    (function(){
+      const counters = document.querySelectorAll('.counter');
+      const speed = 600;
+      function animate(el){
+        const target = +el.dataset.target;
+        let current = 0;
+        const step = Math.max(1, Math.floor(target / (speed / 20)));
+        const t = setInterval(()=> {
+          current += step;
+          if(current >= target){ el.textContent = target; clearInterval(t); }
+          else el.textContent = current;
+        }, 20);
+      }
+      function onScroll(){
+        counters.forEach(c => {
+          if(c.dataset.animated) return;
+          const rect = c.getBoundingClientRect();
+          if(rect.top < window.innerHeight - 50){ animate(c); c.dataset.animated = 'true'; }
+        });
+      }
+      window.addEventListener('scroll', onScroll);
+      onScroll();
+    })();
+
+    // NAV HIGHLIGHT BASED ON SCROLL
+    (function(){
+      const links = document.querySelectorAll('.nav-links a');
+      const sections = Array.from(document.querySelectorAll('main > section, main > header'));
+      function setActive(){
+        let current = 'hero';
+        const offset = window.innerHeight > 900 ? 250 : 140;
+        const scrollPos = window.scrollY + offset;
+        sections.forEach(sec => {
+          if(sec.offsetTop <= scrollPos) current = sec.id || 'hero';
+        });
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+      }
+      setActive();
+      window.addEventListener('scroll', setActive);
+      links.forEach(a => a.addEventListener('click', ()=>{ links.forEach(x=>x.classList.remove('active')); a.classList.add('active'); }));
+    })();
+
+    // SCROLL TO TOP BUTTON
+    (function(){
+      const btn = document.getElementById('scrollTopBtn');
+      if(!btn) return;
+      window.addEventListener('scroll', ()=> { btn.style.display = window.scrollY > 360 ? 'block' : 'none'; });
+      btn.addEventListener('click', ()=> window.scrollTo({ top:0, behavior:'smooth' }));
+    })();
+
+    // CONTACT FORM (frontend simulated)
+    (function(){
+      const form = document.getElementById('contactForm');
+      const status = document.getElementById('formStatus');
+      if(!form) return;
+      form.addEventListener('submit', (e)=> {
+        e.preventDefault();
+        status.textContent = '';
+        const name = form.name.value?.trim();
+        const email = form.email.value?.trim();
+        const message = form.message.value?.trim();
+        if(!name || !email || !message){ status.textContent = 'Please fill all fields.'; return; }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email)){ status.textContent = 'Please enter a valid email.'; return; }
+        status.textContent = 'Sending…';
+        setTimeout(()=>{ form.reset(); status.textContent = 'Message sent — I will reply soon.'; }, 900);
+      });
+    })();
+
+  </script>
+</body>
+</html>
